@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bean:      #1e0e07;
+      --espresso:  #2e1409;
+      --roast:     #5a2d0c;
+      --caramel:   #c47d2e;
+      --gold:      #e4a84a;
+      --cream:     #f5e6c5;
+      --fog:       #fdf6e8;
+      --ink:       #1a0c05;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bean);
+      color: var(--cream);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 4rem;
+      background: linear-gradient(to bottom, rgba(30,14,7,0.95), transparent);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; }
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      transition: opacity 0.3s, color 0.3s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 4rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: -10%; right: -5%;
+      width: 55vw; height: 110vh;
+      background: radial-gradient(ellipse at center, rgba(196,125,46,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.82rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 8vw, 7.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      color: var(--fog);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      max-width: 480px;
+      font-size: 1.15rem;
+      color: var(--cream);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+      margin-bottom: 2.8rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 0.85rem 2.2rem;
+      border: 1px solid var(--caramel);
+      color: var(--caramel);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: background 0.3s, color 0.3s;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+    .hero-cta:hover {
+      background: var(--caramel);
+      color: var(--bean);
+    }
+
+    .hero-scroll-line {
+      position: absolute;
+      bottom: 3rem; left: 4rem;
+      display: flex; align-items: center; gap: 1rem;
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--roast);
+      opacity: 0;
+      animation: fadeUp 0.9s 1.2s forwards;
+    }
+    .hero-scroll-line::before {
+      content: '';
+      display: block; width: 48px; height: 1px;
+      background: var(--roast);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 60px; height: 2px;
+      background: linear-gradient(to right, var(--caramel), var(--gold));
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 7rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      color: var(--fog);
+      margin-bottom: 1rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-image-wrap {
+      position: relative;
+    }
+
+    .about-image-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(145deg, var(--roast) 0%, var(--espresso) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      color: var(--caramel);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-image-placeholder::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(196,125,46,0.04) 20px,
+        rgba(196,125,46,0.04) 21px
+      );
+    }
+
+    .about-image-placeholder::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; right: -2px;
+      width: 60%; height: 60%;
+      border-right: 2px solid var(--caramel);
+      border-bottom: 2px solid var(--caramel);
+    }
+
+    .about-text p {
+      color: rgba(245,230,197,0.82);
+      margin-bottom: 1.2rem;
+      font-size: 1.08rem;
+    }
+
+    .about-text p:first-of-type::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 0.8;
+      float: left;
+      margin: 0.1em 0.1em 0 0;
+      color: var(--gold);
+    }
+
+    /* ── WRITING ── */
+    #writing { padding-top: 4rem; }
+
+    #writing > .section-label, #writing > .section-title, #writing > .section-intro {
+      text-align: center;
+    }
+
+    .section-intro {
+      max-width: 540px;
+      margin: 0 auto 3.5rem;
+      color: rgba(245,230,197,0.7);
+      font-size: 1.05rem;
+    }
+
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2px;
+      margin-top: 3rem;
+    }
+
+    .writing-card {
+      background: var(--espresso);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s ease, background 0.35s ease;
+      cursor: pointer;
+    }
+
+    .writing-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(to right, var(--caramel), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .writing-card:hover {
+      background: var(--roast);
+      transform: translateY(-4px);
+    }
+    .writing-card:hover::before { transform: scaleX(1); }
+
+    .card-tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--fog);
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+
+    .card-excerpt {
+      font-size: 0.96rem;
+      color: rgba(245,230,197,0.65);
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-read {
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: gap 0.3s;
+    }
+    .card-read::after { content: '→'; }
+    .writing-card:hover .card-read { gap: 0.8rem; }
+
+    .card-date {
+      position: absolute;
+      top: 2.5rem; right: 2.5rem;
+      font-size: 0.72rem;
+      color: rgba(245,230,197,0.35);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(90,45,12,0.5);
+      padding: 3rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(245,230,197,0.4);
+      font-size: 0.88rem;
+    }
+
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a {
+      color: rgba(245,230,197,0.4);
+      text-decoration: none;
+      transition: color 0.3s;
+      letter-spacing: 0.05em;
+    }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.8rem; }
+      #hero { padding: 0 1.8rem; }
+      section { padding: 5rem 1.8rem; }
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .about-image-placeholder { aspect-ratio: 4/3; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Your Name</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#writing">Writing</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div id="hero">
+    <span class="hero-eyebrow">Portfolio</span>
+    <h1 class="hero-title">Words brewed<br>with <em>intention.</em></h1>
+    <p class="hero-sub">I write things that matter — stories, essays, and ideas steeped in curiosity and crafted with care.</p>
+    <a href="#writing" class="hero-cta">Explore my writing</a>
+    <div class="hero-scroll-line">Scroll to discover</div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-image-wrap reveal">
+      <div class="about-image-placeholder">☕</div>
+    </div>
+    <div class="about-text">
+      <span class="section-label reveal">About Me</span>
+      <h2 class="section-title reveal">A mind always<br>in motion.</h2>
+      <div class="divider reveal" style="margin: 0 0 2rem;"></div>
+      <p class="reveal">Replace this with your own story. Tell your reader who you are, what drives you, and what kind of work you do. Make it personal — this is your space.</p>
+      <p class="reveal">You can share where you've been, what you believe in, or simply what you're working on right now. Keep it warm and honest.</p>
+      <p class="reveal">A good bio doesn't have to cover everything. It just has to feel like <em>you.</em></p>
+    </div>
+  </section>
+
+  <!-- WRITING -->
+  <section id="writing">
+    <span class="section-label reveal">My Writing</span>
+    <h2 class="section-title reveal">Selected Pieces</h2>
+    <p class="section-intro reveal">A collection of essays, stories, and observations — each one a small window into how I see the world.</p>
+    <div class="divider reveal"></div>
+
+    <div class="writing-grid">
+
+      <div class="writing-card reveal">
+        <span class="card-date">Jan 2025</span>
+        <div class="card-tag">Essay</div>
+        <h3 class="card-title">On the Art of Slowing Down</h3>
+        <p class="card-excerpt">A reflection on what happens when you stop rushing and start noticing — the small moments that make a life.</p>
+        <a href="#" class="card-read">Read more</a>
+      </div>
+
+      <div class="writing-card reveal">
+        <span class="card-date">Nov 2024</span>
+        <div class="card-tag">Personal</div>
+        <h3 class="card-title">Letters I Never Sent</h3>
+        <p class="card-excerpt">Sometimes the best way to understand a feeling is to write it down — even if no one else will ever read it.</p>
+        <a href="#" class="card-read">Read more</a>
+      </div>
+
+      <div class="writing-card reveal">
+        <span class="card-date">Sep 2024</span>
+        <div class="card-tag">Memoir</div>
+        <h3 class="card-title">The City That Raised Me</h3>
+        <p class="card-excerpt">Growing up between languages and landscapes, I learned that home is less a place and more a feeling you carry.</p>
+        <a href="#" class="card-read">Read more</a>
+      </div>
+
+      <div class="writing-card reveal">
+        <span class="card-date">Jul 2024</span>
+        <div class="card-tag">Opinion</div>
+        <h3 class="card-title">Why Silence Is a Skill</h3>
+        <p class="card-excerpt">In a world that rewards noise, choosing quiet is an act of radical self-awareness. Here's how I learned it.</p>
+        <a href="#" class="card-read">Read more</a>
+      </div>
+
+      <div class="writing-card reveal">
+        <span class="card-date">May 2024</span>
+        <div class="card-tag">Reflection</div>
+        <h3 class="card-title">Mornings Before the World Woke Up</h3>
+        <p class="card-excerpt">There is something sacred about the hour before sunrise — I've been chasing that feeling ever since I first found it.</p>
+        <a href="#" class="card-read">Read more</a>
+      </div>
+
+      <div class="writing-card reveal">
+        <span class="card-date">Feb 2024</span>
+        <div class="card-tag">Essay</div>
+        <h3 class="card-title">What Stories Do to Us</h3>
+        <p class="card-excerpt">Narratives don't just describe the world — they reshape how we experience it. A meditation on the power of a good sentence.</p>
+        <a href="#" class="card-read">Read more</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>© 2025 Your Name. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#">Twitter</a>
+      <a href="#">Instagram</a>
+      <a href="#">Email</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
