@@ -3,38 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>On the Art of Slowing Down — Shoresh Shafei</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <title>On the Art of Slowing Down — Your Name</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
   <style>
     :root {
-      --bean:      #1e0e07;
-      --espresso:  #2e1409;
-      --roast:     #5a2d0c;
-      --caramel:   #c47d2e;
-      --gold:      #e4a84a;
-      --cream:     #f5e6c5;
-      --fog:       #fdf6e8;
+      --navy:    #060d1f;
+      --navy2:   #0b1630;
+      --navy3:   #111d3c;
+      --border:  rgba(255,255,255,0.07);
+      --accent:  #3b82f6;
+      --accent2: #60a5fa;
+      --teal:    #0ea5e9;
+      --white:   #f0f4ff;
+      --muted:   rgba(200,210,240,0.55);
+      --mono:    'JetBrains Mono', monospace;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      background-color: var(--bean);
-      color: var(--cream);
-      font-family: 'EB Garamond', Georgia, serif;
-      font-size: 18px;
-      line-height: 1.8;
+      background-color: var(--navy);
+      color: var(--white);
+      font-family: 'Sora', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
       overflow-x: hidden;
     }
 
     body::before {
       content: '';
       position: fixed; inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-image:
+        linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
       pointer-events: none;
-      z-index: 9999;
-      opacity: 0.35;
+      z-index: 0;
+    }
+
+    .glow {
+      position: fixed;
+      top: -20vh; left: 50%;
+      transform: translateX(-50%);
+      width: 70vw; height: 50vh;
+      background: radial-gradient(ellipse, rgba(59,130,246,0.07) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
     }
 
     /* ── NAV ── */
@@ -44,162 +61,217 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.4rem 4rem;
-      background: linear-gradient(to bottom, rgba(30,14,7,0.95), transparent);
+      padding: 0 4rem;
+      height: 64px;
+      background: rgba(6,13,31,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
     }
 
     .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.15em;
-      color: var(--gold);
-      text-transform: uppercase;
+      font-family: var(--mono);
+      font-size: 0.9rem; font-weight: 500;
+      color: var(--white);
       text-decoration: none;
     }
+    .nav-logo span { color: var(--accent); }
 
     .nav-back {
-      color: rgba(245,230,197,0.6);
+      display: flex; align-items: center; gap: 0.5rem;
+      color: var(--muted);
       text-decoration: none;
-      font-size: 0.85rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: color 0.3s;
+      font-size: 0.82rem; font-weight: 500;
+      transition: color 0.2s;
     }
-    .nav-back::before { content: '←'; }
-    .nav-back:hover { color: var(--gold); }
+    .nav-back:hover { color: var(--white); }
+    .nav-back::before { content: '←'; color: var(--accent); }
 
     /* ── ARTICLE HEADER ── */
     .article-header {
+      position: relative; z-index: 1;
       max-width: 720px;
       margin: 0 auto;
-      padding: 10rem 2rem 4rem;
-      text-align: center;
+      padding: 10rem 2rem 3.5rem;
       opacity: 0;
-      animation: fadeUp 0.9s 0.2s forwards;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+
+    .article-meta-top {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .article-tag {
-      font-size: 0.78rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--caramel);
-      margin-bottom: 1.5rem;
-      display: block;
+      padding: 0.2rem 0.7rem;
+      background: rgba(59,130,246,0.1);
+      border: 1px solid rgba(59,130,246,0.25);
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.7rem; color: var(--accent2);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+
+    .article-date {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: rgba(200,210,240,0.3);
+    }
+
+    .article-read-time {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: rgba(200,210,240,0.3);
     }
 
     .article-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 5vw, 3.8rem);
-      font-weight: 900;
-      color: var(--fog);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      color: var(--white);
       line-height: 1.15;
-      margin-bottom: 1.5rem;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.2rem;
     }
 
-    .article-meta {
-      font-size: 0.88rem;
-      color: rgba(245,230,197,0.4);
-      letter-spacing: 0.08em;
-      margin-bottom: 3rem;
-    }
-
-    .article-divider {
-      width: 60px; height: 2px;
-      background: linear-gradient(to right, var(--caramel), var(--gold));
-      margin: 0 auto;
+    .article-subtitle {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.7;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2rem;
     }
 
     /* ── ARTICLE BODY ── */
     .article-body {
-      max-width: 660px;
+      position: relative; z-index: 1;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 4rem 2rem 8rem;
+      padding: 3rem 2rem 6rem;
+      font-family: 'Lora', Georgia, serif;
+      font-size: 1.08rem;
+      line-height: 1.85;
       opacity: 0;
-      animation: fadeUp 0.9s 0.5s forwards;
+      animation: fadeUp 0.7s 0.45s forwards;
     }
 
     .article-body p {
-      margin-bottom: 1.8rem;
-      color: rgba(245,230,197,0.85);
-      font-size: 1.13rem;
-    }
-
-    .article-body p:first-of-type::first-letter {
-      font-family: 'Playfair Display', serif;
-      font-size: 4rem;
-      font-weight: 900;
-      line-height: 0.75;
-      float: left;
-      margin: 0.1em 0.12em 0 0;
-      color: var(--gold);
+      color: rgba(200,210,240,0.8);
+      margin-bottom: 1.6rem;
     }
 
     .article-body h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.7rem;
-      font-weight: 700;
-      color: var(--fog);
+      font-family: 'Sora', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -0.02em;
       margin: 3rem 0 1rem;
     }
 
     .article-body blockquote {
-      border-left: 3px solid var(--caramel);
-      padding: 0.5rem 0 0.5rem 1.8rem;
+      border-left: 3px solid var(--accent);
+      padding: 0.4rem 0 0.4rem 1.6rem;
       margin: 2.5rem 0;
       font-style: italic;
-      font-size: 1.2rem;
-      color: var(--cream);
+      font-size: 1.15rem;
+      color: rgba(200,210,240,0.7);
     }
 
-    /* ── BACK LINK ── */
+    /* ── CODE BLOCKS ── */
+    .article-body pre {
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 0;
+      overflow: hidden;
+      margin: 2.2rem 0;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      position: relative;
+    }
+
+    .article-body pre::before {
+      content: attr(data-lang);
+      display: block;
+      padding: 0.6rem 1.2rem;
+      background: rgba(59,130,246,0.08);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+    }
+
+    .article-body pre code.hljs {
+      padding: 1.4rem 1.6rem;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      background: transparent;
+    }
+
+    /* Inline code */
+    .article-body p code,
+    .article-body li code {
+      background: var(--navy3);
+      color: var(--accent2);
+      padding: 0.18em 0.5em;
+      border-radius: 4px;
+      border: 1px solid rgba(59,130,246,0.2);
+      font-family: var(--mono);
+      font-size: 0.85em;
+    }
+
+    /* ── BACK ── */
     .back-section {
-      max-width: 660px;
+      position: relative; z-index: 1;
+      max-width: 720px;
       margin: 0 auto;
-      padding: 0 2rem 6rem;
-      border-top: 1px solid rgba(90,45,12,0.4);
-      padding-top: 3rem;
+      padding: 0 2rem 5rem;
+      border-top: 1px solid var(--border);
+      padding-top: 2.5rem;
     }
 
     .back-link {
       display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      color: var(--caramel);
+      align-items: center; gap: 0.5rem;
+      color: var(--accent2);
       text-decoration: none;
-      font-size: 0.85rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      transition: gap 0.3s, color 0.3s;
+      font-size: 0.85rem; font-weight: 500;
+      transition: gap 0.2s, color 0.2s;
     }
     .back-link::before { content: '←'; }
-    .back-link:hover { gap: 0.9rem; color: var(--gold); }
+    .back-link:hover { gap: 0.8rem; color: var(--white); }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
+      from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.8rem; }
+      nav { padding: 0 1.5rem; }
       .article-header, .article-body, .back-section { padding-left: 1.4rem; padding-right: 1.4rem; }
     }
   </style>
 </head>
 <body>
 
+  <div class="glow"></div>
+
   <nav>
-    <a href="index.html" class="nav-logo">Shoresh Shafei</a>
+    <a href="index.html" class="nav-logo">your<span>.</span>name</a>
     <a href="index.html#writing" class="nav-back">All writing</a>
   </nav>
 
   <header class="article-header">
-    <span class="article-tag">Essay</span>
+    <div class="article-meta-top">
+      <span class="article-tag">Essay</span>
+      <span class="article-date">January 2025</span>
+      <span class="article-read-time">· 5 min read</span>
+    </div>
     <h1 class="article-title">On the Art of Slowing Down</h1>
-    <div class="article-meta">January 2025 &nbsp;·&nbsp; 5 min read</div>
-    <div class="article-divider"></div>
+    <p class="article-subtitle">A reflection on what happens when you stop rushing and start noticing — the small moments that make a life worth examining.</p>
   </header>
 
   <article class="article-body">
@@ -208,7 +280,7 @@
 
     <p>There is a particular kind of exhaustion that comes not from doing too much, but from never truly stopping. We have become so fluent in the language of productivity that stillness feels like a foreign dialect — one we once knew but have slowly, quietly forgotten.</p>
 
-    <p>I noticed it first in the mornings. I had taken to checking my phone before my feet touched the floor. Before coffee, before light, before even a full breath — the world was already pouring in. Notifications, headlines, messages. The day began not with me, but with everyone else.</p>
+    <p>I noticed it first in the mornings. I had taken to checking my phone before my feet touched the floor. Before coffee, before light, before even a full breath — the world was already pouring in. The day began not with me, but with everyone else.</p>
 
     <blockquote>The fastest way to lose yourself is to keep moving without ever asking where you're going.</blockquote>
 
@@ -216,21 +288,33 @@
 
     <p>Slowing down, I've come to believe, is not a luxury. It is not something you earn after the inbox is cleared or the deadlines are met. Those conditions never fully arrive. Slowness has to be chosen — stubbornly, repeatedly, against the current.</p>
 
-    <p>It starts with small things. Leaving your phone in another room. Eating without a screen. Walking somewhere without headphones. These feel almost transgressive at first, as if you are breaking a social contract no one explicitly signed but everyone somehow agreed to.</p>
+    <p>It starts with small things. Leaving your phone in another room. Eating without a screen. Walking somewhere without headphones. In code, it looks something like this:</p>
 
-    <p>But then something shifts. The world doesn't collapse. In fact, it sharpens. Colors seem more saturated. Conversations go deeper. Your own thoughts — the quiet ones that rarely get airtime — begin to surface.</p>
+    <pre data-lang="python"><code class="language-python">def slow_down(thoughts):
+    for thought in thoughts:
+        print(thought)
+        time.sleep(1)  # pause between each one
+
+slow_down(["breathe", "notice", "be here"])
+</code></pre>
+
+    <p>These feel almost transgressive at first — as if you are breaking a social contract no one explicitly signed but everyone somehow agreed to. But then something shifts. The world doesn't collapse. In fact, it sharpens.</p>
 
     <h2>What You Find in the Stillness</h2>
 
-    <pre><code class="language-python">
-def greet(name):
-    return f"Hello, {name}!"
+    <p>I won't pretend the stillness is always comfortable. Sometimes what rises is exactly what the busyness was designed to keep submerged: grief, longing, questions without easy answers.</p>
+
+    <pre data-lang="javascript"><code class="language-javascript">async function slowDown(thoughts) {
+  for (const thought of thoughts) {
+    console.log(thought);
+    await new Promise(r => setTimeout(r, 1000));
+  }
+}
+
+slowDown(["breathe", "notice", "be here"]);
 </code></pre>
-    
 
-    <p>I won't pretend the stillness is always comfortable. Sometimes what rises is exactly what the busyness was designed to keep submerged: grief, longing, questions without easy answers. Slowing down can feel, initially, like opening a door you had carefully kept shut.</p>
-
-    <p>But on the other side of that discomfort is something worth having. Clarity. A sense of your own rhythm. The quiet knowledge of what actually matters to you, as distinct from what the world insists should.</p>
+    <p>On the other side of that discomfort is something worth having. Clarity. A sense of your own rhythm. The quiet knowledge of what actually matters to you, as distinct from what the world insists should. You can even reference <code>inline concepts</code> like this within regular sentences.</p>
 
     <p>We are, most of us, moving too fast to find out who we are when we stop. That might be worth changing.</p>
 
