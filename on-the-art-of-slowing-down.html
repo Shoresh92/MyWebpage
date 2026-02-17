@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>On the Art of Slowing Down — Your Name</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bean:      #1e0e07;
+      --espresso:  #2e1409;
+      --roast:     #5a2d0c;
+      --caramel:   #c47d2e;
+      --gold:      #e4a84a;
+      --cream:     #f5e6c5;
+      --fog:       #fdf6e8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--bean);
+      color: var(--cream);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 4rem;
+      background: linear-gradient(to bottom, rgba(30,14,7,0.95), transparent);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+
+    .nav-back {
+      color: rgba(245,230,197,0.6);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s;
+    }
+    .nav-back::before { content: '←'; }
+    .nav-back:hover { color: var(--gold); }
+
+    /* ── ARTICLE HEADER ── */
+    .article-header {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 10rem 2rem 4rem;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.2s forwards;
+    }
+
+    .article-tag {
+      font-size: 0.78rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 900;
+      color: var(--fog);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-meta {
+      font-size: 0.88rem;
+      color: rgba(245,230,197,0.4);
+      letter-spacing: 0.08em;
+      margin-bottom: 3rem;
+    }
+
+    .article-divider {
+      width: 60px; height: 2px;
+      background: linear-gradient(to right, var(--caramel), var(--gold));
+      margin: 0 auto;
+    }
+
+    /* ── ARTICLE BODY ── */
+    .article-body {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 4rem 2rem 8rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+
+    .article-body p {
+      margin-bottom: 1.8rem;
+      color: rgba(245,230,197,0.85);
+      font-size: 1.13rem;
+    }
+
+    .article-body p:first-of-type::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 0.75;
+      float: left;
+      margin: 0.1em 0.12em 0 0;
+      color: var(--gold);
+    }
+
+    .article-body h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--fog);
+      margin: 3rem 0 1rem;
+    }
+
+    .article-body blockquote {
+      border-left: 3px solid var(--caramel);
+      padding: 0.5rem 0 0.5rem 1.8rem;
+      margin: 2.5rem 0;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--cream);
+    }
+
+    /* ── BACK LINK ── */
+    .back-section {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+      border-top: 1px solid rgba(90,45,12,0.4);
+      padding-top: 3rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--caramel);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: gap 0.3s, color 0.3s;
+    }
+    .back-link::before { content: '←'; }
+    .back-link:hover { gap: 0.9rem; color: var(--gold); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.8rem; }
+      .article-header, .article-body, .back-section { padding-left: 1.4rem; padding-right: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Your Name</a>
+    <a href="index.html#writing" class="nav-back">All writing</a>
+  </nav>
+
+  <header class="article-header">
+    <span class="article-tag">Essay</span>
+    <h1 class="article-title">On the Art of Slowing Down</h1>
+    <div class="article-meta">January 2025 &nbsp;·&nbsp; 5 min read</div>
+    <div class="article-divider"></div>
+  </header>
+
+  <article class="article-body">
+
+    <!-- ✏️ REPLACE EVERYTHING BELOW WITH YOUR ACTUAL WRITING -->
+
+    <p>There is a particular kind of exhaustion that comes not from doing too much, but from never truly stopping. We have become so fluent in the language of productivity that stillness feels like a foreign dialect — one we once knew but have slowly, quietly forgotten.</p>
+
+    <p>I noticed it first in the mornings. I had taken to checking my phone before my feet touched the floor. Before coffee, before light, before even a full breath — the world was already pouring in. Notifications, headlines, messages. The day began not with me, but with everyone else.</p>
+
+    <blockquote>The fastest way to lose yourself is to keep moving without ever asking where you're going.</blockquote>
+
+    <h2>The Permission We Never Give Ourselves</h2>
+
+    <p>Slowing down, I've come to believe, is not a luxury. It is not something you earn after the inbox is cleared or the deadlines are met. Those conditions never fully arrive. Slowness has to be chosen — stubbornly, repeatedly, against the current.</p>
+
+    <p>It starts with small things. Leaving your phone in another room. Eating without a screen. Walking somewhere without headphones. These feel almost transgressive at first, as if you are breaking a social contract no one explicitly signed but everyone somehow agreed to.</p>
+
+    <p>But then something shifts. The world doesn't collapse. In fact, it sharpens. Colors seem more saturated. Conversations go deeper. Your own thoughts — the quiet ones that rarely get airtime — begin to surface.</p>
+
+    <h2>What You Find in the Stillness</h2>
+
+    <p>I won't pretend the stillness is always comfortable. Sometimes what rises is exactly what the busyness was designed to keep submerged: grief, longing, questions without easy answers. Slowing down can feel, initially, like opening a door you had carefully kept shut.</p>
+
+    <p>But on the other side of that discomfort is something worth having. Clarity. A sense of your own rhythm. The quiet knowledge of what actually matters to you, as distinct from what the world insists should.</p>
+
+    <p>We are, most of us, moving too fast to find out who we are when we stop. That might be worth changing.</p>
+
+    <!-- ✏️ END OF YOUR WRITING -->
+
+  </article>
+
+  <div class="back-section">
+    <a href="index.html#writing" class="back-link">Back to all writing</a>
+  </div>
+
+</body>
+</html>
